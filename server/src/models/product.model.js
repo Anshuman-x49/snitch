@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
-      min: [2, "Name must be at least 2 characters long"],
-      max: [100, "Name cannot be more than 100 characters long"],
+      min: [2, "Title must be at least 2 characters long"],
+      max: [100, "Title cannot be more than 100 characters long"],
     },
     description: {
       type: String,
@@ -28,12 +28,10 @@ const productSchema = new mongoose.Schema(
       },
     },
     images: {
-      type: [String],
+      type: [{ type: String, required: true }],
       validate: [
         {
-          validator: function (val) {
-            return val.length <= 5;
-          },
+          validator: (images) => images.length <= 5,
           message: "A maximum of 5 image links can be stored",
         },
       ],
@@ -56,7 +54,7 @@ const productSchema = new mongoose.Schema(
     seller: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: true
     },
   },
   {

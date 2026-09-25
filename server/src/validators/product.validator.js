@@ -1,13 +1,13 @@
 import { body, validationResult } from "express-validator";
 
 const createProductValidator = [
-  body("name")
+  body("title")
     .exists()
-    .withMessage("Name is required")
+    .withMessage("Title is required")
     .bail()
     .trim()
     .isLength({ min: 2, max: 100 })
-    .withMessage("Product name must be between 2 and 100 characters long")
+    .withMessage("Product title must be between 2 and 100 characters long")
     .isAlpha("en-US", { ignore: " " })
     .bail()
     .withMessage("Product name must contain only alphabetic characters and spaces"),
@@ -25,7 +25,7 @@ const createProductValidator = [
 
   body("price.amount")
     .exists()
-    .withMessage("Price is required")
+    .withMessage("Price amount is required")
     .bail()
     .isFloat({ min: 0 })
     .withMessage("Price amount must be a non-negative number"),
@@ -40,26 +40,13 @@ const createProductValidator = [
     .isIn(["INR", "USD"])
     .withMessage("Currency must be either INR or USD"),
 
-  body("images")
-    .exists()
-    .withMessage("Images are required")
-    .bail()
-    .isArray({ min: 1, max: 5 })
-    .withMessage("Images must be an array containing 1 to 5 image links"),
-  body("images.*")
-    .isString()
-    .withMessage("Each image must be a string link")
-    .bail()
-    .trim()
-    .notEmpty()
-    .withMessage("Image link cannot be empty"),
-
   body("sizes")
     .exists()
     .withMessage("Sizes are required")
     .bail()
     .isArray({ min: 1 })
     .withMessage("Sizes must be an array containing at least one size"),
+
   body("sizes.*.size")
     .exists()
     .withMessage("Size name is required")
@@ -68,8 +55,10 @@ const createProductValidator = [
     .withMessage("Size name must be a string")
     .bail()
     .trim()
+    .toUpperCase()
     .isIn(["XS", "S", "M", "L", "XL", "XXL"])
     .withMessage("Size must be one of XS, S, M, L, XL, XXL"),
+
   body("sizes.*.stock")
     .exists()
     .withMessage("Stock is required for each size")

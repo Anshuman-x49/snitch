@@ -277,6 +277,7 @@ const getUserController = async (req, res) => {
   });
 };
 
+//controller for user logout
 const logoutUserController = async (req, res) => {
   try {
     //get refresh token from cookie
