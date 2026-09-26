@@ -5,7 +5,7 @@ import {
   userRegisterController,
   getUserController,
   logoutUserController,
-} from "../controllers/auth.controllers.js";
+} from "../controllers/auth.controller.js";
 import {
   loginValidator,
   registerValidator,
@@ -34,7 +34,7 @@ router.post("/login", loginValidator, userLoginController);
  * @description Route for user refresh token
  * @method POST
  * @url /api/v1/auth/refresh
- * @access private
+ * @access protected
  */
 router.post("/refresh", userRefreshTokenController);
 

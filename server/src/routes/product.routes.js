@@ -3,7 +3,7 @@ import { authenticationMiddleware } from "../middlewares/auth.middleware.js";
 import {
   createProductController,
   getProductsController,
-} from "../controllers/product.controllers.js";
+} from "../controllers/product.controller.js";
 import multer from "multer";
 import { createProductValidator } from "../validators/product.validator.js";
 
