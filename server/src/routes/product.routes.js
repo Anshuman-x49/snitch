@@ -1,6 +1,9 @@
 import express from "express";
 import { authenticationMiddleware } from "../middlewares/auth.middleware.js";
-import { createProductController, getProductsController } from "../controllers/product.controllers.js";
+import {
+  createProductController,
+  getProductsController,
+} from "../controllers/product.controllers.js";
 import multer from "multer";
 import { createProductValidator } from "../validators/product.validator.js";
 
@@ -15,7 +18,7 @@ const upload = multer({
     if (allowedType.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error("Only images are allowed"), false);
+      cb(new Error("Only png,jpeg,jpg images are allowed!"), false);
     }
   },
 });
@@ -26,7 +29,7 @@ const router = express.Router();
  * @description Route for seller creating a new product
  * @method POST
  * @url /api/products/create
- * @access protected(seller only)
+ * @access private(seller only)
  */
 router.post(
   "/",

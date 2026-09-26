@@ -3,9 +3,7 @@ import config from "../config/config.js";
 import { v4 as uuidv4 } from "uuid";
 
 const client = new ImageKit({
-  publicKey: config.imagekit_public_key,
-  privateKey: config.imagekit_private_key,
-  urlEndpoint: config.imagekit_url_endpoint,
+  privateKey: config.imagekit_private_key
 });
 
 export const uploadProductImageService = async ({ image }) => {
