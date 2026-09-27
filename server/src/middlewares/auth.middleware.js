@@ -21,4 +21,13 @@ const authenticationMiddleware = async (req, res, next) => {
   }
 };
 
-export { authenticationMiddleware };
+const authorizationMiddleware = async (req, res, next) => {
+  if (req.user.role !== "seller") {
+    return res.status(403).json({
+      message: "You are not authorized to do this action",
+    });
+  }
+  next();
+};
+
+export { authenticationMiddleware, authorizationMiddleware };

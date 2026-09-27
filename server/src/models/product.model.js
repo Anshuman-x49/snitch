@@ -5,14 +5,14 @@ const productSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      min: [2, "Title must be at least 2 characters long"],
-      max: [100, "Title cannot be more than 100 characters long"],
+      minLength: [2, "Title must be at least 2 characters long"],
+      maxLength: [100, "Title cannot be more than 100 characters long"],
     },
     description: {
       type: String,
       required: true,
-      min: [10, "Description must be at least 10 characters long"],
-      max: [500, "Description cannot be more than 500 characters long"],
+      minLength: [10, "Description must be at least 10 characters long"],
+      maxLength: [500, "Description cannot be more than 500 characters long"],
     },
     price: {
       amount: {
@@ -51,6 +51,10 @@ const productSchema = new mongoose.Schema(
         },
       },
     ],
+    isPublished: {
+      type: Boolean,
+      default: false,
+    },
     seller: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

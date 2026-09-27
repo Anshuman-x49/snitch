@@ -1,11 +1,21 @@
 import express from "express";
-import { authenticationMiddleware } from "../middlewares/auth.middleware.js";
+import {
+  authenticationMiddleware,
+  authorizationMiddleware,
+} from "../middlewares/auth.middleware.js";
 import {
   createProductController,
   getProductsController,
+  listProductController,
+  unlistProductController,
+  updateProductController,
 } from "../controllers/product.controller.js";
 import multer from "multer";
-import { createProductValidator } from "../validators/product.validator.js";
+import {
+  createProductValidator,
+  listUnlistValidator,
+  updateProductValidator,
+} from "../validators/product.validator.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -34,14 +44,7 @@ const router = express.Router();
 router.post(
   "/",
   authenticationMiddleware,
-  (req, res, next) => {
-    if (req.user.role !== "seller") {
-      return res.status(403).json({
-        message: "You are not authorized to create a product",
-      });
-    }
-    next();
-  },
+  authorizationMiddleware,
   upload.array("images"),
   (req, res, next) => {
     req.body?.price && (req.body.price = JSON.parse(req.body.price));
@@ -50,6 +53,48 @@ router.post(
   },
   createProductValidator,
   createProductController,
+);
+
+/**
+ * @description Route for seller updating a product
+ * @method PATCH
+ * @url /api/products/:id
+ * @access private(seller only)
+ */
+router.patch(
+  "/:id",
+  authenticationMiddleware,
+  authorizationMiddleware,
+  updateProductValidator,
+  updateProductController,
+);
+
+/**
+ * @description Route for seller listing a product
+ * @method POST
+ * @url /api/products/list/:id
+ * @access private(seller only)
+ */
+router.post(
+  "/list/:id",
+  authenticationMiddleware,
+  authorizationMiddleware,
+  listUnlistValidator,
+  listProductController,
+);
+
+/**
+ * @description Route for seller unlisting a product
+ * @method POST
+ * @url /api/products/unlist/:id
+ * @access private(seller only)
+ */
+router.post(
+  "/unlist/:id",
+  authenticationMiddleware,
+  authorizationMiddleware,
+  listUnlistValidator,
+  unlistProductController,
 );
 
 /**

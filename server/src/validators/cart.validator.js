@@ -1,7 +1,7 @@
-import { body, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 
 const addToCartValidator = [
-  body("productId")
+  body("id")
     .exists()
     .withMessage("Product ID is required")
     .bail()
@@ -37,4 +37,27 @@ const addToCartValidator = [
   },
 ];
 
-export { addToCartValidator };
+const removeFromCartValidator = [
+  param("id")
+    .exists()
+    .withMessage("Product ID is required")
+    .bail()
+    .isString()
+    .withMessage("Product ID must be a string")
+    .bail()
+    .isMongoId()
+    .withMessage("Invalid product ID"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: "Invalid request",
+        error: errors.array(),
+      });
+    }
+    next();
+  },
+];
+
+export { addToCartValidator, removeFromCartValidator };
